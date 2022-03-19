@@ -1,5 +1,5 @@
 Flask==2.0.1
 gunicorn==20.1.0
 Jinja2==3.0.3
-MakupSafe==2.0.1
-Werkzeug==2.0.1
+MakupSafe==2.1.0
+Werkzeug==2.0.3
