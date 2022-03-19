@@ -1,0 +1,32 @@
+{% extends 'layout/app.html'%}
+
+{% block body %}
+
+<div class="row d-inline-flex">
+
+    {% for depute in deputes %}
+    <div class="col-6 col-sm-4 col-md-3 p-2">
+
+        <div class="card">
+            <!-- <img src="..." class="card-img-top" alt="..."> -->
+            <div class="card-body name text-center">
+                <h5 class="card-title">{{depute['depute']['nom_de_famille']}} {{depute['depute']['prenom']}}</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Groupe politique : {{depute['depute']['groupe_sigle']}}</li>
+                <li class="list-group-item">Parti politique : {{depute['depute']['parti_ratt_financier']}}</li>
+                <li class="list-group-item">Profession : {{depute['depute']['profession']}}</li>
+                <li class="list-group-item">Département d’élection : {{depute['depute']['nom_circo']}}</li>
+            </ul>
+            <div class="card-body footer-card">
+                <a href="/selected/{{depute['depute']['id']}}/{{depute['depute']['nom_de_famille']}}/{{depute['depute']['prenom']}}" class="card-link">Voir plus</a>
+            </div>
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock%}

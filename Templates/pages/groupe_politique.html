@@ -1,0 +1,111 @@
+{% extends 'layout/app.html'%}
+
+{% block body %}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Groupe Politique</th>
+            <th scope="col">présences détectées AN</th>
+            <th scope="col">participations AN</th>
+            <th scope="col">Questions Orales</th>
+            <th scope="col">Questions Ecrites</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for parti in differents_partis["groupe_politique"] %}
+
+
+        <tr>
+            <th scope="row">{{parti["name"]}}</th>
+
+            {% set keyword = parti["keyword"]%}
+
+            <td>{{dataPartiPolitique[keyword]["hemicycle_presence"]}}</td>
+            <td>{{dataPartiPolitique[keyword]["hemicycle_interventions"]}}</td>
+            <td>{{dataPartiPolitique[keyword]["hemicycle_questions_orales"]}}</td>
+            <td>{{dataPartiPolitique[keyword]["hemicycle_questions_ecrites"]}}</td>
+
+
+        </tr>
+
+        {% endfor %}
+
+
+    </tbody>
+
+
+
+    <thead>
+        <tr>
+            <th scope="col">Groupe Politique</th>
+            <th scope="col">commission_presences</th>
+            <th scope="col">commission_interventions</th>
+            <th scope="col">rapports</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for parti in differents_partis["groupe_politique"] %}
+
+
+        <tr>
+            <th scope="row">{{parti["name"]}}</th>
+
+            {% set keyword = parti["keyword"]%}
+
+
+            <td>{{dataPartiPolitique[keyword]["commission_presences"]}}</td>
+            <td>{{dataPartiPolitique[keyword]["commission_interventions"]}}</td>
+            <td>{{dataPartiPolitique[keyword]["rapports"]}}</td>
+
+
+        </tr>
+
+        {% endfor %}
+
+
+    </tbody>
+
+
+
+
+    <thead>
+        <tr>
+            <th scope="col">Groupe Politique</th>
+            <th scope="col">propositions_ecrites</th>
+            <th scope="col">propositions_signees</th>
+            <th scope="col">amendements</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for parti in differents_partis["groupe_politique"] %}
+
+
+        <tr>
+            <th scope="row">{{parti["name"]}}</th>
+
+            {% set keyword = parti["keyword"]%}
+
+
+            <td>{{dataPartiPolitique[keyword]["propositions_ecrites"]}}</td>
+            <td>{{dataPartiPolitique[keyword]["propositions_signees"]}}</td>
+            <td>{{dataPartiPolitique[keyword]["amendements"]}}</td>
+
+
+        </tr>
+
+        {% endfor %}
+
+
+    </tbody>
+
+
+
+</table>
+
+
+<img src="data:image/png;base64, {{ plot_url }}">
+
+{% endblock%}
