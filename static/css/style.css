@@ -25,6 +25,9 @@ section {
     align-items: center;
     justify-content: center;
 }
+th {
+    text-align: left;
+}
 
 .name{
     background-color: #203841
