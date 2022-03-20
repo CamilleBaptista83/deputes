@@ -7,32 +7,37 @@
     {% for parti in differents_partis["groupe_politique"] %}
 
     {% set keyword = parti["keyword"]%}
+    {% set parti = parti["name"]%}
 
     <div class="col-sm-4 col-md-6 p-2">
 
         <div class="card text-center m-3">
             <div class="card-body">
-                <h5 class="card-title">{{parti["name"]}}</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <h5 class="card-title">{{parti}}</h5>
+                <p class="card-text">Ce parti compte {{dataPartiPolitique[keyword]["nb_gens"]}} personnes.</p>
 
 
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
-                            type="button" role="tab" aria-controls="home" aria-selected="true">Activité AN</button>
+                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+                            data-bs-target="#home_{{parti}} " type="button" role="tab" aria-controls="home"
+                            aria-selected="true">Activité AN</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
-                            type="button" role="tab" aria-controls="profile" aria-selected="false">Activité
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+                            data-bs-target="#profile_{{parti}}" type="button" role="tab" aria-controls="profile"
+                            aria-selected="false">Activité
                             Commissions</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact"
-                            type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
+                        <button class="nav-link" id="contact-tab" data-bs-toggle="tab"
+                            data-bs-target="#contact_{{parti}}" type="button" role="tab" aria-controls="contact"
+                            aria-selected="false">Propositions et amendements</button>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="tab-pane fade show active" id="home_{{parti}}" role="tabpanel"
+                        aria-labelledby="home-tab">
 
 
 
@@ -59,7 +64,7 @@
 
 
                     </div>
-                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tab-pane fade" id="profile_{{parti}}" role="tabpanel" aria-labelledby="profile-tab">
                         <table class="table" style="color: white;">
                             <tbody>
                                 <tr>
@@ -77,7 +82,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                    <div class="tab-pane fade" id="contact_{{parti}}" role="tabpanel" aria-labelledby="contact-tab">
                         <table class="table" style="color: white;">
                             <tbody>
                                 <tr>
@@ -116,9 +121,21 @@
 
 </div>
 
+<div class="row">
+    <div class="col text-center">
+        <h3 >Présence moyenne en commission d'un député par parti politique</h3>
+
+        <img src="data:image/png;base64, {{ plot_url }}">
+
+    </div>
+    <div class="col text-center">
+        <h3 >Présence moyenne en assemblée nationnale d'un député par parti politique</h3>
+
+        <img src="data:image/png;base64, {{ moyenne_presence_assemblee }}">
+
+    </div>
+</div>
 
 
-
-<img src="data:image/png;base64, {{ plot_url }}">
 
 {% endblock%}

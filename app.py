@@ -3,6 +3,7 @@ import requests
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 import io
 import base64
 
@@ -23,12 +24,20 @@ def depute_selected(id, nom, prenom):
     deputes = response.json()["deputes"]
 
     presence_depute_mois = {
+        "septembre_2021": {},
+        "octobre_2021": {},
         "novembre_2021": {},
         "decembre_2021": {},
         "janvier_2021": {},
         "fevrier_2021": {}
     }
 
+    presence_depute_mois["septembre_2021"] = requests.get('https://www.nosdeputes.fr/synthese/202109/json')
+    presence_depute_mois["septembre_2021"] = presence_depute_mois["septembre_2021"].json()["deputes"][1 - id]['depute'][
+        'commission_presences']
+    presence_depute_mois["octobre_2021"] = requests.get('https://www.nosdeputes.fr/synthese/202110/json')
+    presence_depute_mois["octobre_2021"] = presence_depute_mois["octobre_2021"].json()["deputes"][1 - id]['depute'][
+        'commission_presences']
     presence_depute_mois["novembre_2021"] = requests.get('https://www.nosdeputes.fr/synthese/202111/json')
     presence_depute_mois["novembre_2021"] = presence_depute_mois["novembre_2021"].json()["deputes"][1 - id]['depute'][
         'commission_presences']
@@ -42,12 +51,13 @@ def depute_selected(id, nom, prenom):
     presence_depute_mois["fevrier_2021"] = presence_depute_mois["fevrier_2021"].json()["deputes"][1 - id]['depute'][
         'commission_presences']
 
-    df_mois = pd.DataFrame(presence_depute_mois, index=[0]).T
+    df_mois = pd.DataFrame(presence_depute_mois, index=['presence_depute_mois']).T
 
     img = io.BytesIO()
 
-    sns.relplot(data=df_mois, kind="line")
-    plt.yticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+    array = df_mois['presence_depute_mois'].to_numpy()
+    sns.relplot(data=df_mois, kind="line", height=8.27)
+    plt.yticks(range(0, max(array), 1))
     plt.savefig(img, format='png')
     plt.close()
     img.seek(0)
@@ -56,8 +66,7 @@ def depute_selected(id, nom, prenom):
 
     image = 'https://www.nosdeputes.fr/depute/photo/' + nom_complet + '/100'
 
-    return render_template('pages/depute_selected.html', deputes=deputes, depute_selected=id, image=image,
-                           plot_url=plot_url)
+    return render_template('pages/depute_selected.html', deputes=deputes, depute_selected=id, image=image, plot_url=plot_url)
 
 
 @app.route("/groupe-politique")
@@ -83,6 +92,7 @@ def groupe_politique():
 
     dataPartiPolitique = {
         'lr': {
+            "nb_gens" : 0,
             "hemicycle_presence": 0,
             "hemicycle_interventions": 0,
             "hemicycle_questions_orales": 0,
@@ -93,8 +103,11 @@ def groupe_politique():
             "propositions_ecrites": 0,
             "propositions_signees": 0,
             "amendements": 0,
+            "moyenne_presence_commission" : 0,
+            "moyenne_presence_assemblee" : 0,
         },
         'lrem': {
+            "nb_gens" : 0,
             "hemicycle_presence": 0,
             "hemicycle_interventions": 0,
             "hemicycle_questions_orales": 0,
@@ -105,8 +118,11 @@ def groupe_politique():
             "propositions_ecrites": 0,
             "propositions_signees": 0,
             "amendements": 0,
+            "moyenne_presence_commission" : 0,
+            "moyenne_presence_assemblee" : 0,
         },
         'lfi': {
+            "nb_gens" : 0,
             "hemicycle_presence": 0,
             "hemicycle_interventions": 0,
             "hemicycle_questions_orales": 0,
@@ -117,8 +133,11 @@ def groupe_politique():
             "propositions_ecrites": 0,
             "propositions_signees": 0,
             "amendements": 0,
+            "moyenne_presence_commission" : 0,
+            "moyenne_presence_assemblee" : 0,
         },
         'gdr': {
+            "nb_gens" : 0,
             "hemicycle_presence": 0,
             "hemicycle_interventions": 0,
             "hemicycle_questions_orales": 0,
@@ -129,8 +148,11 @@ def groupe_politique():
             "propositions_ecrites": 0,
             "propositions_signees": 0,
             "amendements": 0,
+            "moyenne_presence_commission" : 0,
+            "moyenne_presence_assemblee" : 0,
         },
         'soc': {
+            "nb_gens" : 0,
             "hemicycle_presence": 0,
             "hemicycle_interventions": 0,
             "hemicycle_questions_orales": 0,
@@ -141,8 +163,11 @@ def groupe_politique():
             "propositions_ecrites": 0,
             "propositions_signees": 0,
             "amendements": 0,
+            "moyenne_presence_commission" : 0,
+            "moyenne_presence_assemblee" : 0,
         },
         'lt': {
+            "nb_gens" : 0,
             "hemicycle_presence": 0,
             "hemicycle_interventions": 0,
             "hemicycle_questions_orales": 0,
@@ -153,8 +178,11 @@ def groupe_politique():
             "propositions_ecrites": 0,
             "propositions_signees": 0,
             "amendements": 0,
+            "moyenne_presence_commission" : 0,
+            "moyenne_presence_assemblee" : 0,
         },
         'modem': {
+            "nb_gens" : 0,
             "hemicycle_presence": 0,
             "hemicycle_interventions": 0,
             "hemicycle_questions_orales": 0,
@@ -165,8 +193,11 @@ def groupe_politique():
             "propositions_ecrites": 0,
             "propositions_signees": 0,
             "amendements": 0,
+            "moyenne_presence_commission" : 0,
+            "moyenne_presence_assemblee" : 0,
         },
         'ae': {
+            "nb_gens" : 0,
             "hemicycle_presence": 0,
             "hemicycle_interventions": 0,
             "hemicycle_questions_orales": 0,
@@ -177,8 +208,11 @@ def groupe_politique():
             "propositions_ecrites": 0,
             "propositions_signees": 0,
             "amendements": 0,
+            "moyenne_presence_commission" : 0,
+            "moyenne_presence_assemblee" : 0,
         },
         'udi': {
+            "nb_gens" : 0,
             "hemicycle_presence": 0,
             "hemicycle_interventions": 0,
             "hemicycle_questions_orales": 0,
@@ -189,8 +223,11 @@ def groupe_politique():
             "propositions_ecrites": 0,
             "propositions_signees": 0,
             "amendements": 0,
+            "moyenne_presence_commission" : 0,
+            "moyenne_presence_assemblee" : 0,
         },
         'ni': {
+            "nb_gens" : 0,
             "hemicycle_presence": 0,
             "hemicycle_interventions": 0,
             "hemicycle_questions_orales": 0,
@@ -201,6 +238,8 @@ def groupe_politique():
             "propositions_ecrites": 0,
             "propositions_signees": 0,
             "amendements": 0,
+            "moyenne_presence_commission" : 0,
+            "moyenne_presence_assemblee" : 0,
         },
 
     }
@@ -209,6 +248,7 @@ def groupe_politique():
         for depute in deputes:
             if depute['depute']['groupe_sigle'] == parti["name"]:
                 keyword = parti["keyword"]
+                dataPartiPolitique[keyword]["nb_gens"] += 1
                 dataPartiPolitique[keyword]["hemicycle_presence"] += (
                             depute['depute']['hemicycle_interventions'] + depute['depute'][
                         'hemicycle_interventions_courtes'])
@@ -224,20 +264,35 @@ def groupe_politique():
                             depute['depute']['amendements_proposes'] + depute['depute']['amendements_signes'] +
                             depute['depute']['amendements_adoptes'])
 
+    for parti in differents_partis["groupe_politique"]:
+        keyword = parti["keyword"]
+        dataPartiPolitique[keyword]["moyenne_presence_commission"] = dataPartiPolitique[keyword]["commission_presences"] / dataPartiPolitique[keyword]["nb_gens"]
+        dataPartiPolitique[keyword]["moyenne_presence_assemblee"] = dataPartiPolitique[keyword]["hemicycle_presence"] / dataPartiPolitique[keyword]["nb_gens"]
+
+
     df = pd.DataFrame(dataPartiPolitique).T.reset_index()
 
     img = io.BytesIO()
 
     plt.figure(figsize=(15, 10))
-    sns.catplot(x='index', y='hemicycle_presence', kind='bar', data=df)
+    sns.catplot(x='index', y='moyenne_presence_commission', kind='bar', data=df)
     plt.savefig(img, format='png')
     plt.close()
     img.seek(0)
 
     plot_url = base64.b64encode(img.getvalue()).decode('utf8')
 
+
+    plt.figure(figsize=(15, 10))
+    sns.catplot(x='index', y='moyenne_presence_assemblee', kind='bar', data=df)
+    plt.savefig(img, format='png')
+    plt.close()
+    img.seek(0)
+
+    moyenne_presence_assemblee = base64.b64encode(img.getvalue()).decode('utf8')
+
     return render_template('pages/groupe_politique.html', dataPartiPolitique=dataPartiPolitique,
-                           differents_partis=differents_partis, plot_url=plot_url)
+                           differents_partis=differents_partis, plot_url=plot_url, moyenne_presence_assemblee= moyenne_presence_assemblee)
 
 
 if __name__ == '__main__':
