@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
 
+*{
+padding: 0px;
+margin: 0px;
+overflow-x: hidden;
+}
+
 body {
 background-color: #A4978E;
 font-family: 'Fredoka', sans-serif;
@@ -62,4 +68,17 @@ section {
 .list-group-item {
     background-color: #132227;
     color: #ffffff;
+}
+
+
+
+
+@media screen and (max-width: 500px) {
+
+    .profil{
+        width: 100%;
+    }
+    .footer-image img {
+        width: 70%;
+    }
 }
