@@ -87,6 +87,13 @@ th {
     padding: 0;
 }
 
+.graphiques{
+    flex-direction: column;
+}
+.graphiques img{
+    width: 70%;
+}
+
 
 
 
