@@ -23,18 +23,12 @@ def create_app():
         deputes = response.json()["deputes"]
 
         presence_depute_mois = {
-            "septembre_2021": {},
             "octobre_2021": {},
             "novembre_2021": {},
             "decembre_2021": {},
             "janvier_2021": {},
             "fevrier_2021": {}
         }
-
-        presence_depute_mois["septembre_2021"] = requests.get('https://www.nosdeputes.fr/synthese/202109/json')
-        presence_depute_mois["septembre_2021"] = \
-        presence_depute_mois["septembre_2021"].json()["deputes"][1 - id]['depute'][
-            'commission_presences']
         presence_depute_mois["octobre_2021"] = requests.get('https://www.nosdeputes.fr/synthese/202110/json')
         presence_depute_mois["octobre_2021"] = presence_depute_mois["octobre_2021"].json()["deputes"][1 - id]['depute'][
             'commission_presences']
@@ -59,7 +53,7 @@ def create_app():
 
         array = df_mois['presence_depute_mois'].to_numpy()
         sns.relplot(data=df_mois, kind="line", height=8.27)
-        plt.yticks(range(0, max(array), 1))
+        plt.yticks(range(0, max(array)+1, 1))
         plt.savefig(img, format='png')
         plt.close()
         img.seek(0)

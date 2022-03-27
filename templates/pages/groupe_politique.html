@@ -2,6 +2,10 @@
 
 {% block body %}
 
+<h1 class="text-center m-3">Groupes Politique</h1>
+<h3>ATTENTION : Ces données ont été caculées selon le calendrier parlemenaire 2021-2022 </h3>
+
+
 <div class="row d-inline-flex">
 
     {% for parti in differents_partis["groupe_politique"] %}
@@ -21,13 +25,12 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="home-tab" data-bs-toggle="tab"
                             data-bs-target="#home_{{parti}} " type="button" role="tab" aria-controls="home"
-                            aria-selected="true">Activité AN</button>
+                            aria-selected="true">Activité Assemblée Nationale</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="profile-tab" data-bs-toggle="tab"
                             data-bs-target="#profile_{{parti}}" type="button" role="tab" aria-controls="profile"
-                            aria-selected="false">Activité
-                            Commissions</button>
+                            aria-selected="false">Activités Commissions</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="contact-tab" data-bs-toggle="tab"
@@ -42,22 +45,54 @@
 
 
                         <table class="table" style="color: white;">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Hypothèses</th>
+                                </tr>
+                            </thead>
+
                             <tbody>
                                 <tr>
-                                    <th>hemicycle_presence</th>
-                                    <td>{{dataPartiPolitique[keyword]["hemicycle_presence"]}}</td>
+                                    <th>Hemicycle présences</th>
+                                    {% set hemicycle_presence_5mois = (dataPartiPolitique[keyword]["hemicycle_presence"]
+                                    * (5/12))|round|int %}
+                                    <td>{{hemicycle_presence_5mois}}</td>
+                                    <td>{{(hemicycle_presence_5mois * 3 /
+                                        19.5 / dataPartiPolitique[keyword]["nb_gens"])|round(1,
+                                        'floor') }} heure/semaine</td>
+
                                 </tr>
                                 <tr>
-                                    <th>hemicycle_interventions</th>
-                                    <td>{{dataPartiPolitique[keyword]["hemicycle_interventions"]}}</td>
+                                    <th>Hemicycle interventions</th>
+                                    {% set hemicycle_interventions_5mois =
+                                    (dataPartiPolitique[keyword]["hemicycle_interventions"] * (5/12))|round|int %}
+                                    <td>{{hemicycle_interventions_5mois}}</td>
+                                    <td>{{(hemicycle_interventions_5mois * 10 / 19.5 /
+                                        dataPartiPolitique[keyword]["nb_gens"])|round(1, 'floor') }} minutes/semaine</td>
+
                                 </tr>
                                 <tr>
-                                    <th>hemicycle_questions_orales</th>
-                                    <td>{{dataPartiPolitique[keyword]["hemicycle_questions_orales"]}}</td>
+                                    <th>Hemicycle questions orales</th>
+                                    {% set hemicycle_questions_orales_5mois =
+                                    (dataPartiPolitique[keyword]["hemicycle_questions_orales"] * (5/12))|round|int %}
+                                    <td>{{hemicycle_questions_orales_5mois}}</td>
+                                    <td>{{(hemicycle_questions_orales_5mois * 2 / 19.5/
+                                        dataPartiPolitique[keyword]["nb_gens"])|round(1, 'floor') }} minutes/semaine
+                                    </td>
+
+
                                 </tr>
                                 <tr>
-                                    <th>hemicycle_questions_ecrites</th>
-                                    <td>{{dataPartiPolitique[keyword]["hemicycle_questions_ecrites"]}}</td>
+                                    <th>Hemicycle questions écrites</th>
+                                    {% set hemicycle_questions_ecrites_5mois =
+                                    (dataPartiPolitique[keyword]["hemicycle_questions_ecrites"] * (5/12))|round|int %}
+                                    <td>{{hemicycle_questions_ecrites_5mois}}</td>
+                                    <td>{{(hemicycle_questions_ecrites_5mois * 2 / 19.5/
+                                        dataPartiPolitique[keyword]["nb_gens"])|round(1, 'floor') }} minutes/semaine
+                                    </td>
+
                                 </tr>
                             </tbody>
                         </table>
@@ -66,36 +101,97 @@
                     </div>
                     <div class="tab-pane fade" id="profile_{{parti}}" role="tabpanel" aria-labelledby="profile-tab">
                         <table class="table" style="color: white;">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Hypothèses</th>
+                                </tr>
+                            </thead>
+
                             <tbody>
                                 <tr>
-                                    <th>commission_presences</th>
-                                    <td>{{dataPartiPolitique[keyword]["commission_presences"]}}</td>
+                                    <th>Commission presences</th>
+                                    {% set commission_presences_5mois =
+                                    (dataPartiPolitique[keyword]["commission_presences"]
+                                    * (5/12))|round|int %}
+
+                                    <td>{{commission_presences_5mois}} </td>
+                                    <td>{{(commission_presences_5mois * 3.5 / 19.5/
+                                        dataPartiPolitique[keyword]["nb_gens"])|round(1, 'floor') }} heures/semaine
+                                    </td>
+
+
                                 </tr>
                                 <tr>
-                                    <th>commission_interventions</th>
-                                    <td>{{dataPartiPolitique[keyword]["commission_interventions"]}}</td>
+                                    <th>Commission interventions</th>
+                                    {% set commission_interventions_5mois =
+                                    (dataPartiPolitique[keyword]["commission_interventions"]
+                                    * (5/12))|round|int %}
+
+                                    <td>{{commission_interventions_5mois}} </td>
+                                    <td>{{(hemicycle_questions_ecrites_5mois * 5 / 19.5/
+                                        dataPartiPolitique[keyword]["nb_gens"])|round(1, 'floor') }} minutes/semaine
+                                    </td>
+
+
                                 </tr>
                                 <tr>
-                                    <th>rapports</th>
-                                    <td>{{dataPartiPolitique[keyword]["rapports"]}}</td>
+                                    <th>Rapports</th>
+                                    {% set rapports_5mois = (dataPartiPolitique[keyword]["rapports"]
+                                    * (5/12))|round|int %}
+
+                                    <td>{{rapports_5mois}}</td>
+                                    <td>{{(rapports_5mois * 3 / 19.5/
+                                        dataPartiPolitique[keyword]["nb_gens"])|round(1, 'floor') }} heures/semaine
+                                    </td>
+
+
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="tab-pane fade" id="contact_{{parti}}" role="tabpanel" aria-labelledby="contact-tab">
                         <table class="table" style="color: white;">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Hypothèses</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 <tr>
-                                    <th>propositions_ecrites</th>
-                                    <td>{{dataPartiPolitique[keyword]["propositions_ecrites"]}}</td>
+                                    <th>Propositions ecrites</th>
+                                    {% set propositions_ecrites_5mois =
+                                    (dataPartiPolitique[keyword]["propositions_ecrites"]
+                                    * (5/12))|round|int %}
+
+                                    <td>{{propositions_ecrites_5mois}} </td>
+                                    <td>{{(propositions_ecrites_5mois * 3 / 19.5/
+                                        dataPartiPolitique[keyword]["nb_gens"])|round(1, 'floor') }} heures/semaine
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <th>propositions_signees</th>
-                                    <td>{{dataPartiPolitique[keyword]["propositions_signees"]}}</td>
+                                    <th>Propositions signees</th>
+                                    {% set propositions_signees_5mois =
+                                    (dataPartiPolitique[keyword]["propositions_signees"]
+                                    * (5/12))|round|int %}
+
+                                    <td>{{propositions_signees_5mois}} </td>
+                                    <td>{{(propositions_signees_5mois * 2 / 19.5/
+                                        dataPartiPolitique[keyword]["nb_gens"])|round(1, 'floor') }} heures/semaine
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <th>amendements</th>
-                                    <td>{{dataPartiPolitique[keyword]["amendements"]}}</td>
+                                    <th>Amendements</th>
+                                    {% set amendements_5mois = (dataPartiPolitique[keyword]["amendements"]
+                                    * (5/12))|round|int %}
+
+                                    <td>{{amendements_5mois}}</td>
+                                    <td>{{(amendements_5mois * 0.5 / 19.5/
+                                        dataPartiPolitique[keyword]["nb_gens"])|round(1, 'floor') }} heures/semaine
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -108,28 +204,19 @@
     </div>
 
 
-    <!-- <tr>
-            <th scope="row">{{parti["name"]}}</th>
-
-            {% set keyword = parti["keyword"]%}
-
-
-
-        </tr> -->
-
     {% endfor %}
 
 </div>
 
 <div class="row">
     <div class="col text-center">
-        <h3 >Présence moyenne en commission d'un député par parti politique</h3>
+        <h3>Présence moyenne en commission d'un député par parti politique</h3>
 
         <img src="data:image/png;base64, {{ plot_url }}">
 
     </div>
     <div class="col text-center">
-        <h3 >Présence moyenne en assemblée nationnale d'un député par parti politique</h3>
+        <h3>Présence moyenne en assemblée nationnale d'un député par parti politique</h3>
 
         <img src="data:image/png;base64, {{ moyenne_presence_assemblee }}">
 

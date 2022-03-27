@@ -7,7 +7,9 @@
 {% if depute['depute']['id'] == depute_selected %}
 
 
-<div class="card text-center m-3">
+<div class="card text-center m-3 depute-selected">
+    <h3>ATTENTION : Ces données ont été caculées selon le calendrier parlemenaire 2021-2022 </h3>
+
     <div class="card-body">
         <div class="row mb-3">
             <div class="col-sm-4 col-md-3 p-2-md-4 image-placement">
@@ -23,13 +25,14 @@
                         </li>
                         <li class="list-group-item">Profession : {{depute['depute']['profession']}}</li>
                         <li class="list-group-item">Département d’élection : {{depute['depute']['nom_circo']}}</li>
+                        {% set semaines_presences_5_mois = (depute['depute']['semaines_presence'] * (5/12)) |round|int
+                        %}
                         <li class="list-group-item">Temps de présence en semaine :
-                            {{depute['depute']['semaines_presence']}}
+                            {{semaines_presences_5_mois}}
                         </li>
                         <!-- semaine presences * 6 jours * 7heures par jours / semaines totales / jours -->
-                        <li class="list-group-item">Présence heures par jour lissé sur l'année :
-                            {{(depute['depute']['semaines_presence'] *
-                            6 * 7 / 39 / 6)|round(1, 'floor')}}</li>
+                        <li class="list-group-item">Présence heures par jour lissé sur l'année 2021-2022 :
+                            {{(semaines_presences_5_mois * 6 * 7 / 19.5 / 6)|round(1, 'floor')}}</li>
                     </ul>
                 </div>
             </div>
@@ -39,7 +42,7 @@
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
-                    role="tab" aria-controls="home" aria-selected="true">Activité AN</button>
+                    role="tab" aria-controls="home" aria-selected="true">Activité Assemblée Nationale</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button"
@@ -70,35 +73,43 @@
                     <tbody>
                         <tr>
                             <th scope="row">présences détectées</th>
-                            <td>{{depute['depute']['hemicycle_interventions'] +
-                                depute['depute']['hemicycle_interventions_courtes']}}
-                            </td>
-                            {% set presence_an = ((depute['depute']['hemicycle_interventions'] +
-                            depute['depute']['hemicycle_interventions_courtes']) * 7 /
-                            depute['depute']['semaines_presence'])|round(1,
+                            {% set presence_5mois = ((depute['depute']['hemicycle_interventions'] +
+                            depute['depute']['hemicycle_interventions_courtes']) * (5/12)) |round|int %}
+                            <td>{{presence_5mois}}</td>
+
+                            {% set presence_an = (presence_5mois * 3 /
+                            semaines_presences_5_mois)|round(1,
                             'floor') %}
                             <td>{{presence_an}} heure/semaine</td>
                         </tr>
                         <tr>
                             <th scope="row">participations</th>
-                            <td>{{depute['depute']['hemicycle_interventions']}}</td>
-                            <td>{{(depute['depute']['hemicycle_interventions'] * 0.8 /
-                                depute['depute']['semaines_presence'])|round(1,
-                                'floor')}} heures/semaine
+                            {% set participations_5mois = (depute['depute']['hemicycle_interventions'] * (5/12))
+                            |round|int %}
+                            <td>{{ participations_5mois }}</td>
+                            <td>{{(participations_5mois * 10 /
+                                semaines_presences_5_mois)|round(1,
+                                'floor')}} minutes/semaine
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">Les questions orales </th>
-                            <td>{{depute['depute']['questions_orales']}}</td>
-                            <td>{{(depute['depute']['questions_orales'] * 2 /
-                                depute['depute']['semaines_presence'])|round(1, 'floor')}} minutes/semaine
+                            {% set questions_orales_5mois = (depute['depute']['questions_orales'] * (5/12)) |round|int
+                            %}
+
+                            <td>{{questions_orales_5mois}}</td>
+                            <td>{{(questions_orales_5mois * 2 /
+                                semaines_presences_5_mois)|round(1, 'floor')}} minutes/semaine
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">Les questions écrites </th>
-                            <td>{{depute['depute']['questions_ecrites']}}</td>
-                            <td>{{(depute['depute']['questions_ecrites'] * 2 /
-                                depute['depute']['semaines_presence'])|round(1,
+                            {% set questions_ecrites_5mois = (depute['depute']['questions_ecrites'] * (5/12)) |round|int
+                            %}
+
+                            <td>{{questions_ecrites_5mois}}</td>
+                            <td>{{(questions_ecrites_5mois * 2 /
+                                semaines_presences_5_mois)|round(1,
                                 'floor')}} minutes/semaine
                             </td>
 
@@ -120,25 +131,33 @@
                     <tbody>
                         <tr>
                             <th scope="row">présences</th>
-                            <td>{{depute['depute']['commission_presences']}}</td>
+                            {% set commission_presences_5mois = (depute['depute']['commission_presences'] * (5/12))
+                            |round|int %}
+
+                            <td>{{commission_presences_5mois}}</td>
                             <!-- presence commission * 3.5 / presence totale  -->
-                            <td>{{(depute['depute']['commission_presences'] * 3.5 /
-                                depute['depute']['semaines_presence'])|round(1,
-                                'floor')}} heures/semaine                            
+                            <td>{{(commission_presences_5mois* 3.5 /
+                                semaines_presences_5_mois)|round(1,
+                                'floor')}} heures/semaine
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">interventions</th>
-                            <td>{{depute['depute']['commission_interventions']}}</td>
-                            <td>{{(depute['depute']['commission_interventions'] * 5 /
-                                depute['depute']['semaines_presence'])|round(1,
+                            {% set commission_interventions_5mois = (depute['depute']['commission_interventions'] *
+                            (5/12)) |round|int %}
+
+                            <td>{{commission_interventions_5mois}}</td>
+                            <td>{{(commission_interventions_5mois * 5 /
+                                semaines_presences_5_mois)|round(1,
                                 'floor')}} minutes/semaine
                             </td>
                         </tr>
                         <tr>
                             <th scope="row">nombre de rapports écrits</th>
-                            <td>{{depute['depute']['rapports']}}</td>
-                            <td>{{(depute['depute']['rapports'] * 3 / depute['depute']['semaines_presence'])|round(1,
+                            {% set rapports_5mois = (depute['depute']['rapports'] * (5/12)) |round|int %}
+
+                            <td>{{rapports_5mois}}</td>
+                            <td>{{(rapports_5mois * 3 / semaines_presences_5_mois)|round(1,
                                 'floor')}} heures/semaine
                             </td>
                         </tr>
@@ -158,24 +177,30 @@
                     <tbody>
                         <tr>
                             <th scope="row"> Le nombre de propositions de lois écrites</th>
-                            <td>{{depute['depute']['propositions_ecrites']}}</td>
-                            <td>{{(depute['depute']['propositions_ecrites'] * 3 /
-                                depute['depute']['semaines_presence'])|round(1,
+                            {% set propositions_ecrites_5mois = (depute['depute']['propositions_ecrites'] * (5/12)) |round|int %}
+
+                            <td>{{propositions_ecrites_5mois}}</td>
+                            <td>{{(propositions_ecrites_5mois * 3 /
+                                semaines_presences_5_mois)|round(1,
                                 'floor')}} heures/semaine</td>
                         </tr>
                         <tr>
                             <th scope="row">Le nombre de propositions de lois signées</th>
-                            <td>{{depute['depute']['propositions_signees']}}</td>
-                            <td>{{(depute['depute']['propositions_signees'] * 2 /
-                                depute['depute']['semaines_presence'])|round(1,
+                            {% set propositions_signees_5mois = (depute['depute']['propositions_signees'] * (5/12)) |round|int %}
+
+                            <td>{{propositions_signees_5mois}}</td>
+                            <td>{{(propositions_signees_5mois * 2 /
+                                semaines_presences_5_mois)|round(1,
                                 'floor')}} heures/semaine</td>
                         </tr>
                         <tr>
                             <th scope="row">Le nombre d’amendements</th>
-                            <td>{{depute['depute']['amendements_proposes'] + depute['depute']['amendements_signes'] +
-                                depute['depute']['amendements_adoptes']}}</td>
-                            <td>{{(depute['depute']['rapports'] * 20 / depute['depute']['semaines_presence'])|round(1,
-                                'floor')}} minutes/semaine</td>
+                            {% set amendements_5mois = ((depute['depute']['amendements_proposes'] + depute['depute']['amendements_signes'] +
+                            depute['depute']['amendements_adoptes']) * (5/12)) |round|int %}
+
+                            <td>{{amendements_5mois}}</td>
+                            <td>{{(amendements_5mois * 0.5 / semaines_presences_5_mois)|round(1,
+                                'floor')}} heures/semaine</td>
                         </tr>
 
                     </tbody>
@@ -194,7 +219,7 @@
 
     <section class="footer-image">
 
-        <h3>Présence en commission les 3 derniers mois</h3>
+        <h3>Présence en commission les 5 derniers mois</h3>
 
         <img src="data:image/png;base64, {{ plot_url }}">
 
